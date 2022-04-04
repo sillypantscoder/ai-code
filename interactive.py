@@ -28,6 +28,7 @@ while True:
 		text = text[:-1]
 	elif newChar == '\x03':
 		# Ctrl-C
+		print(text)
 		exit()
 	elif newChar == '\t':
 		# Tab
@@ -50,6 +51,7 @@ while True:
 	# Find a new suggestion.
 	suggestion = x.generateFromPrevious(text)
 	# Print the suggestion.
-	addSuggestion(suggestion)
+	if suggestion:
+		addSuggestion(suggestion)
 	# And flush STDOUT.
 	stdout.flush()

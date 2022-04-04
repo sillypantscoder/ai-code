@@ -42,6 +42,7 @@ class WordMarkovChain(MarkovChain):
 		for i in range(len(s) - 1):
 			self.recordSingle(s[i], s[i + 1])
 	def generateFromPrevious(self, before):
+		if len(before) == 0: return "";
 		last = words(before)[-1]
 		return self.predictNextChar(last)
 
