@@ -4,7 +4,7 @@ from markov import WordMarkovChain, MarkovChain
 import os
 
 def addSuggestion(s):
-	print(u"\u001b[30;1m" + s + u"\u001b[0m\u001b[" + str(len(s)) + "D", end="")
+	print(u"\u001b[30;1m" + s.replace("\n", "↲").replace("\t", "↦") + u"\u001b[0m\u001b[" + str(len(s)) + "D", end="")
 
 # Train the Markov chain.
 x = (WordMarkovChain if "WORD" in os.environ and os.environ["WORD"] else MarkovChain)()
@@ -32,9 +32,13 @@ while True:
 	elif newChar == '\t':
 		# Tab
 		text += suggestion
-	elif '\x1b' in newChar:
-		# Arrow key
-		pass
+	elif newChar == '\x1b':
+		# Some modifier key
+		getch()
+		m = getch()
+		if m == "Z":
+			# Shift+Tab
+			text += "\t"
 	elif newChar == '\r':
 		# Enter
 		text += "\n"
