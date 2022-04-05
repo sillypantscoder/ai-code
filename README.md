@@ -10,7 +10,7 @@ This program uses an AI I wrote to generate a Python program, then removes error
 
 ### Generating program
 
-`create.py` creates a Markov chain that I wrote. It is not very good at writing code because it guesses each new character based on _just the previous one_. The code is available in `markov.py`.
+`create.py` creates a Markov chain that I wrote. It is not very good at writing code because it guesses each new character based on _just the previous one_, i.e. a ONE CHARACTER MEMORY. The code is available in `markov.py`.
 
 ### Deleting errors
 

@@ -9,7 +9,7 @@ for filename in files:
 	x.trainWith(f.read())
 	f.close()
 
-t = x.beginGeneratingText().predict(2000 if "WORD" in os.environ and os.environ["WORD"] else 20000)
+t = x.beginGeneratingText().predict(5000 if "WORD" in os.environ and os.environ["WORD"] else 20000)
 
 f = open("orig.py", "w")
 f.write(t)
