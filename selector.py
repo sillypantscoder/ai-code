@@ -8,7 +8,7 @@ FONTHEIGHT = FONT.render("0", True, (0, 0, 0)).get_height()
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
-def SELECTOR(header, items: list):
+def selector(header, items: list):
 	global screen
 	scrn_height = 500
 	scrn_width = 500
@@ -40,7 +40,7 @@ def SELECTOR(header, items: list):
 		# Events
 		for event in pygame.event.get():
 				if event.type == pygame.QUIT:
-					pygame.quit(); exit()
+					return -1
 					# User clicked close button
 				if event.type == pygame.MOUSEBUTTONUP:
 					pos = pygame.mouse.get_pos()
@@ -48,4 +48,34 @@ def SELECTOR(header, items: list):
 						screen = pygame.display.set_mode([500, 560])
 						return math.floor((pos[1] - FONTHEIGHT) / FONTHEIGHT)
 		c.tick(60)
-		pygame.display.flip()sillypantscoder-patch-1
+		pygame.display.flip()
+
+def progress(text):
+	global screen
+	rendered = FONT.render(text, True, BLACK)
+	scrn_height = rendered.get_height() + 10
+	scrn_width = rendered.get_width() + 10
+	screen = pygame.display.set_mode([scrn_width, scrn_height], pygame.RESIZABLE)
+	running = text
+	while running:
+		rendered = FONT.render(running, True, BLACK)
+		screen.fill(WHITE)
+		if scrn_height < rendered.get_height() + 10:
+			scrn_height = rendered.get_height() + 10
+			screen = pygame.display.set_mode([scrn_width, scrn_height], pygame.RESIZABLE)
+		if scrn_width < rendered.get_width() + 10:
+			scrn_width = rendered.get_width() + 10
+			screen = pygame.display.set_mode([scrn_width, scrn_height], pygame.RESIZABLE)
+		# Events
+		for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					return;
+					# User clicked close button
+				elif event.type == pygame.VIDEORESIZE:
+					scrn_height = event.h
+					scrn_width = event.w
+					screen = pygame.display.set_mode([scrn_width, scrn_height], pygame.RESIZABLE)
+		# Header
+		screen.blit(rendered, ((scrn_width - rendered.get_width()) / 2, (scrn_height - rendered.get_height()) / 2))
+		pygame.display.flip()
+		running = yield;
