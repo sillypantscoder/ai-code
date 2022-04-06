@@ -45,7 +45,6 @@ def selector(header, items: list):
 				if event.type == pygame.MOUSEBUTTONUP:
 					pos = pygame.mouse.get_pos()
 					if pos[1] - FONTHEIGHT < len(items) * FONTHEIGHT:
-						screen = pygame.display.set_mode([500, 560])
 						return math.floor((pos[1] - FONTHEIGHT) / FONTHEIGHT)
 		c.tick(60)
 		pygame.display.flip()
