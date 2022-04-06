@@ -16,7 +16,8 @@ def render_all_text():
 		if len(t):
 			color = 255 * (t[0] == ">")
 			if color == 255 or show_other:
-				rendered.append(FONT.render(t[2:], True, (255 - color, color, 0)))
+				if not show_other: rendered.append(FONT.render(t[2:], True, (0, 0, 0)))
+				else: rendered.append(FONT.render(t[2:], True, (255 - color, color, 0)))
 	widths = list(map(lambda x: x.get_width(), rendered))
 	maxwidth = max(*widths)
 	height = FONT.render("0", True, (0, 0, 0)).get_width() * len(rendered)
