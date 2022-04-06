@@ -26,27 +26,32 @@ class MarkovChain:
 	def beginGeneratingText(self):
 		return GenerationProgress(choice(self.start), self)
 
-def words(s: str):
+def words(s: str, wordsep: "list[str]" = [" ", "\n", "\t"]):
 	r = []
 	p = ""
 	for c in s:
 		p += c
-		if c in [" ", "\n", "\t"]:
+		if c in wordsep:
 			r.append(p)
 			p = ""
 	if len(p) > 0: r.append(p)
 	return r
 
 class WordMarkovChain(MarkovChain):
+	def __init__(self, wordsep: "list[str]" = [" ", "\n", "\t"], strict: bool = False):
+		self.dir: dict[str, list[str]] = {}
+		self.start: list[str] = []
+		self.strict = strict
+		self.wordsep = wordsep
 	def trainWith(self, text: str):
 		if not text: return;
-		s = words(text)
+		s = words(text, self.wordsep)
 		self.start.append(s[0])
 		for i in range(len(s) - 1):
 			self.recordSingle(s[i], s[i + 1])
 	def generateFromPrevious(self, before):
 		if len(before) == 0: return "";
-		last = words(before)[-1]
+		last = words(before, self.wordsep)[-1]
 		return self.predictNextChar(last)
 
 class GenerationProgress:
