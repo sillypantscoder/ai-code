@@ -1,6 +1,7 @@
 import subprocess
 from sys import stdout
 import selector
+import re
 
 err = "-----------"
 
@@ -24,22 +25,27 @@ while len(err) > 10:
 	err = err.decode("UTF-8")
 	stdout.flush()
 	# 3. Find out what line the error is on.
-	searchcharno = len(err)
-	while searchcharno > 0:
-		lineno = err.rfind("line", 0, searchcharno)
-		lineno = err[lineno + 5:]
-		endpos = [lineno.find("\n"), lineno.find(",")] # Find the end of the line number: either a newline or a comma.
-		try: endpos.remove(-1) # Remove the -1 if we couldn't find one of those.
-		except: pass
-		endpos = min(endpos) # Find the end index.
-		lineno = lineno[:endpos] # This should be the line number.
-		if lineno == "":
-			# There are no errors!!! :)
-			exit()
-		if lineno.isdigit():
-			lineno = int(lineno)
-			if (lineno - 2) < len(err): break;
-		searchcharno -= 1
+	x = [err[m.end()+1:] for m in re.finditer('line', err)]
+	# x = ["<lineno>\n			^\nSyntaxError: blah blah blah"]
+	y = []
+	for i in x:
+		r = ""
+		for char in i:
+				if char in "1234567890":
+						r += char
+				else: break;
+		y.append(r)
+	# y = possible line numbers
+	lineno = None
+	y.reverse()
+	for l in y:
+		# l = possible line number. Reversed so we get the deepest error first.
+		if l.isdigit(): # needs to be a number
+			lineno = int(l)
+			if lineno < len(newFile): # needs to not be off the end of the file
+				break;
+			else: lineno = None
 	# 4. Remove the line from the file and update the screen.
+	if lineno == None: exit()
 	g.send(f"Running file... (line {lineno}/{len(newFile)}; {round((lineno / len(newFile)) * 100)}% done)")
 	newFile.pop(lineno - 1)
